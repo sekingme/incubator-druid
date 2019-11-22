@@ -26,10 +26,9 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import static java.util.Arrays.sort;
 
 public class StorageLocationSelectorStrategyTest
 {
@@ -207,7 +206,7 @@ public class StorageLocationSelectorStrategyTest
     StorageLocation loc3 = locations.next();
 
     File[] result = new File[]{loc1.getPath(), loc2.getPath(), loc3.getPath()};
-    sort(result);
+    Arrays.sort(result);
     Assert.assertArrayEquals(new File[]{localStorageFolder1, localStorageFolder2, localStorageFolder3}, result);
   }
 

@@ -658,22 +658,35 @@ public class SegmentLoaderLocalCacheManagerTest
   @Test
   public void testSegmentDistributionUsingRandomStrategy() throws Exception
   {
-    final List<StorageLocationConfig> locations = new ArrayList<>();
-    final StorageLocationConfig locationConfig = createStorageLocationConfig("local_storage_folder", 11L,
+    final List<StorageLocationConfig> locationConfigs = new ArrayList<>();
+    final StorageLocationConfig locationConfig = createStorageLocationConfig("local_storage_folder", 10L,
             true);
     final StorageLocationConfig locationConfig2 = createStorageLocationConfig("local_storage_folder2", 100L,
             false);
-    final StorageLocationConfig locationConfig3 = createStorageLocationConfig("local_storage_folder3", 10L,
+    final StorageLocationConfig locationConfig3 = createStorageLocationConfig("local_storage_folder3", 9L,
             true);
-    locations.add(locationConfig);
-    locations.add(locationConfig2);
-    locations.add(locationConfig3);
+    locationConfigs.add(locationConfig);
+    locationConfigs.add(locationConfig2);
+    locationConfigs.add(locationConfig3);
 
+    List<StorageLocation> locations = new ArrayList<>();
+    for (StorageLocationConfig locConfig : locationConfigs) {
+      locations.add(
+              new StorageLocation(
+                      locConfig.getPath(),
+                      locConfig.getMaxSize(),
+                      null
+              )
+      );
+    }
     manager = new SegmentLoaderLocalCacheManager(
             TestHelper.getTestIndexIO(),
-            new SegmentLoaderConfig().withLocations(locations),
+            new SegmentLoaderConfig().withLocations(locationConfigs).withStorageLocationSelectorStrategy(
+                    new RandomStorageLocationSelectorStrategy(locations)
+            ),
             jsonMapper
     );
+
     final File segmentSrcFolder = tmpFolder.newFolder("segmentSrcFolder");
 
     // Segment 1 should be downloaded in local_storage_folder, segment1 size 10L

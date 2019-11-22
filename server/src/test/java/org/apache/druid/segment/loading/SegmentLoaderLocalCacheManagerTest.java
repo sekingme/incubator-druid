@@ -659,11 +659,11 @@ public class SegmentLoaderLocalCacheManagerTest
   public void testSegmentDistributionUsingRandomStrategy() throws Exception
   {
     final List<StorageLocationConfig> locations = new ArrayList<>();
-    final StorageLocationConfig locationConfig = createStorageLocationConfig("local_storage_folder", 10L,
+    final StorageLocationConfig locationConfig = createStorageLocationConfig("local_storage_folder", 11L,
             true);
     final StorageLocationConfig locationConfig2 = createStorageLocationConfig("local_storage_folder2", 100L,
             false);
-    final StorageLocationConfig locationConfig3 = createStorageLocationConfig("local_storage_folder3", 9L,
+    final StorageLocationConfig locationConfig3 = createStorageLocationConfig("local_storage_folder3", 10L,
             true);
     locations.add(locationConfig);
     locations.add(locationConfig2);

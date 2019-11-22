@@ -659,7 +659,7 @@ public class SegmentLoaderLocalCacheManagerTest
   public void testSegmentDistributionUsingRandomStrategy() throws Exception
   {
     final List<StorageLocationConfig> locationConfigs = new ArrayList<>();
-    final StorageLocationConfig locationConfig = createStorageLocationConfig("local_storage_folder", 1000L,
+    final StorageLocationConfig locationConfig = createStorageLocationConfig("local_storage_folder", 10L,
             true);
     final StorageLocationConfig locationConfig2 = createStorageLocationConfig("local_storage_folder2", 100L,
             false);
@@ -750,7 +750,13 @@ public class SegmentLoaderLocalCacheManagerTest
     createLocalSegmentFile(segmentSrcFolder,
             "test_segment_loader/2014-12-20T00:00:00.000Z_2014-12-21T00:00:00.000Z/2015-05-27T03:38:35.683Z/0");
 
-    File segmentFile3 = manager.getSegmentFiles(segmentToDownload3);
-    Assert.assertFalse(segmentFile3.getAbsolutePath().contains("/local_storage_folder2/"));
+    try {
+      // expect failure
+      manager.getSegmentFiles(segmentToDownload3);
+      Assert.fail();
+    }
+    catch (SegmentLoadingException e) {
+    }
+    Assert.assertFalse("Expect cache miss after dropping segment", manager.isSegmentLoaded(segmentToDownload3));
   }
 }
